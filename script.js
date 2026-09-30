@@ -4,7 +4,7 @@ if(essay&&count){essay.addEventListener('input',()=>{const words=essay.value.tri
 const sampleToggle=document.getElementById('sampleToggle'),sampleText=document.getElementById('sampleText');
 if(sampleToggle&&sampleText){sampleToggle.addEventListener('click',()=>{const open=sampleText.style.display!=='none';sampleText.style.display=open?'none':'block';sampleToggle.textContent=open?'Open Sample Answer':'Hide Sample Answer'})}
 
-// Make Rewrite the Stages 01-03 match the expanded exercise-card format, with hidden sample answers.
+// Rewrite the Stages: make ALL 01-10 items use the same exercise-card format.
 const buildBox=document.querySelector('.build-box');
 if(buildBox){
   const sentences=buildBox.querySelectorAll('.sentence');
@@ -19,8 +19,8 @@ if(buildBox){
     sentence.className='exercise';
     sentence.innerHTML=`<span class="q">${num}</span><p>${prompt}</p><input placeholder="${placeholder}"><div class="answer" id="r${num}">Model: <strong>${answer}</strong></div><button class="check" data-target="r${num}">Check</button>`;
   });
-  buildBox.querySelectorAll('.check').forEach(button=>button.addEventListener('click',()=>{const el=document.getElementById(button.dataset.target);if(el){el.classList.toggle('show');button.textContent=el.classList.contains('show')?'Hide answer':'Check'}}));
-
+  const existingExtra=buildBox.nextElementSibling;
+  if(existingExtra && existingExtra.classList.contains('exercise-grid') && existingExtra.querySelector('#r4')) existingExtra.remove();
   const extra=document.createElement('div');
   extra.className='exercise-grid';
   extra.innerHTML=`
@@ -33,6 +33,7 @@ if(buildBox){
     <div class="exercise"><span class="q">10</span><p>Rewrite using a relative clause: “Some compounds return to the Earth's surface. These compounds are deposited through wet and dry deposition.”</p><input placeholder="Write your answer …"><div class="answer" id="r10">Model: <strong>Compounds which return to the Earth's surface are deposited through wet and dry deposition.</strong></div><button class="check" data-target="r10">Check</button></div>
   `;
   buildBox.insertAdjacentElement('afterend',extra);
+  buildBox.querySelectorAll('.check').forEach(button=>button.addEventListener('click',()=>{const el=document.getElementById(button.dataset.target);if(el){el.classList.toggle('show');button.textContent=el.classList.contains('show')?'Hide answer':'Check'}}));
   extra.querySelectorAll('.check').forEach(button=>button.addEventListener('click',()=>{const el=document.getElementById(button.dataset.target);if(el){el.classList.toggle('show');button.textContent=el.classList.contains('show')?'Hide answer':'Check'}}));
 }
 
